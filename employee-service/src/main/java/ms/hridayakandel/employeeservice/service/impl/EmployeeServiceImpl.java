@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import ms.hridayakandel.employeeservice.dto.APIResponseDto;
 import ms.hridayakandel.employeeservice.dto.DepartmentDto;
 import ms.hridayakandel.employeeservice.dto.EmployeeDto;
+import ms.hridayakandel.employeeservice.dto.OrganizationDto;
 import ms.hridayakandel.employeeservice.entity.Employee;
 import ms.hridayakandel.employeeservice.exceptions.ResourceNotFoundException;
 import ms.hridayakandel.employeeservice.mapper.AutoEmployeeMapper;
@@ -78,10 +79,15 @@ public class EmployeeServiceImpl implements EmployeeService {
                     .retrieve()
                     .bodyToMono(DepartmentDto.class)
                     .block();
+            OrganizationDto organizationDto =  webClient.get()
+                    .uri("http://localhost:8083/api/organizations/"+ employee.get().getOrganizationCode())
+                    .retrieve()
+                    .bodyToMono(OrganizationDto.class)
+                    .block();
            // DepartmentDto departmentDto = apiClient.getDepartmentByDepartmentCode(employee.get().getDepartmentCode());
             EmployeeDto employeeDto = AutoEmployeeMapper.MAPPER.mapToEmployeeDto(employee.get());
             APIResponseDto apiResponseDto = new APIResponseDto(
-                    employeeDto,departmentDto
+                    employeeDto,departmentDto,organizationDto
             );
 
             return apiResponseDto;
@@ -101,10 +107,14 @@ public class EmployeeServiceImpl implements EmployeeService {
             departmentDto.setDepartmentName("R&D department");
             departmentDto.setDepartmentCode("RD001");
             departmentDto.setDepartmentDescription("Research and development department");
+            OrganizationDto organizationDto = new OrganizationDto();
+            organizationDto.setOrganizationCode("A001");
+            organizationDto.setOrganizationName("XYZ");
+            organizationDto.setOrganizationDescription("Dummy organization");
 
             EmployeeDto employeeDto = AutoEmployeeMapper.MAPPER.mapToEmployeeDto(employee.get());
             APIResponseDto apiResponseDto = new APIResponseDto(
-                    employeeDto,departmentDto
+                    employeeDto,departmentDto,organizationDto
             );
 
             return apiResponseDto;
