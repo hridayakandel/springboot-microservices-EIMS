@@ -10,4 +10,4 @@ WORKDIR /app
 COPY target/springboot-docker-teaching-0.0.1-SNAPSHOT.jar /app/springboot-docker-teaching.jar
 
 #Entry instruction to start the jar file in container
-ENTRYPOINT["java","-jar","springboot-docker-teaching.jar"]
+ENTRYPOINT ["java","-jar","springboot-docker-teaching.jar"]
